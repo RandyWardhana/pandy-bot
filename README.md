@@ -9,3 +9,9 @@ Pong!
 Greeting Someone
 ###### `-covid`
 Tracking Covid-19 Case
+###### `-anime`
+Find anime by title
+###### `-manga`
+Find manga by title
+###### `-seiyuu`
+Find seiyuu by name
