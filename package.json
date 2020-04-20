@@ -1,0 +1,38 @@
+{
+  "name": "pandy-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node src/app.js",
+    "dev": "nodemon -i node_modules -x npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RandyWardhana/pandy-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RandyWardhana/pandy-bot/issues"
+  },
+  "homepage": "https://github.com/RandyWardhana/pandy-bot#readme",
+  "dependencies": {
+    "@babel/core": "^7.9.0",
+    "axios": "^0.19.2",
+    "date-fns": "^2.12.0",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "nodemon": "^2.0.3",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5"
+  }
+}
