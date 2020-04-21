@@ -21,11 +21,11 @@ Object.keys(botCommands).map(key => {
 function parseCommand(prefix, message) {
   if(message.startsWith(prefix)) {
     const split = message.replace(prefix, '').split(/ /g)
-    const command = split.shift()
+    const command = split.shift().toLowerCase()
 
     return command
   } else {
-    msg.channel.send('Invalid Command!')
+    msg.channel.send('Invalid command, please type `p:help` to see available commands!')
   }
 }
 
@@ -39,7 +39,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   const args = msg.content.replace('p:', '').split(/ /g)
-  const command = args.shift()
+  const command = args.shift().toLowerCase()
 
   if (command === 'help') {
     let fields = []

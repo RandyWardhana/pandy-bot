@@ -1,6 +1,22 @@
 import axios from 'axios'
 import { MessageEmbed } from 'discord.js'
+
+import { MangaSearch } from '../util/endpoint'
 import { formatNumber } from '../util/formatNumber'
+import { send, clear } from '../response'
+
+const embedResult = (msg, params) => {
+  const embed = new MessageEmbed()
+    .setColor('#2196f3')
+    .setAuthor(params.title, params.image_url, params.url)
+    .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
+    .setDescription(params.synopsis)
+    .addField('Chapter', formatNumber(params.chapters), false)
+    .addField('Volumes', formatNumber(params.volumes), false)
+    .addField('Score', params.score, false)
+  
+  send(msg, embed)
+}
 
 export default {
   label: 'p:manga',
@@ -8,35 +24,25 @@ export default {
   value: 'Find manga by title',
   async execute(msg, args) {
     if (args.length < 1) {
-      msg.channel.send('Please insert Manga title.\nFor Example: `-manga {MANGA_TITLE}`')
+      send(msg, 'Please insert Manga title.\nFor Example: `p:manga {MANGA_TITLE}`')
     } else {
-      const URI = encodeURI(`${process.env.MYANIMELIST_URI}/search/manga?q=${args.join(' ')}&limit=1`)
-
       try {
-        let result = await axios.get(URI)
-
-        if (result.data !== undefined) {
-          const {
-            url, image_url, title,
-            synopsis, chapters, volumes, score
-          } = result.data.results[0]
-
-          const embed = new MessageEmbed()
-            .setColor('#2196f3')
-            .setAuthor(title, image_url, url)
-            .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
-            .setDescription(synopsis)
-            .addField('Chapter', formatNumber(chapters), false)
-            .addField('Volumes', formatNumber(volumes), false)
-            .addField('Score', score, false)
-
-          msg.channel.send(embed)
-        } else {
-          msg.channel.send(`Failed to get ${args} statistic`)
-        }
+        send(msg, '```Searching for manga information....```').then(async (msg) => {
+          let result = await axios.get(MangaSearch(args))
+          
+          if (result.data !== undefined) {
+            embedResult(msg, result.data.results[0])
+          } else {
+            send(msg, `Failed to get ${args} statistic`)
+          }
+          clear(msg)
+        }, 0).catch((e) => {
+          clear(msg)
+          send(msg, `Failed to get ${args} statistic`)
+        })
 
       } catch (e) {
-        msg.channel.send(`Failed to get ${args} statistic`)
+        send(msg, `Failed to get ${args} statistic`)
       }
     }
   }
