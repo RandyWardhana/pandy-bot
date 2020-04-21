@@ -19,8 +19,7 @@ Object.keys(botCommands).map(key => {
   client.commands.set(botCommands[key].name, botCommands[key]);
 })
 
-
-function parseCommand(prefix, message) {
+const parseCommand = (prefix, message) => {
   if (message.startsWith(prefix)) {
     const split = message.replace(prefix, '').split(/ /g)
     const command = split.shift().toLowerCase()
