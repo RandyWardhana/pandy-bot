@@ -1,6 +1,8 @@
 import dotenv from 'dotenv'
 import Discord from 'discord.js'
 
+import { send } from './response'
+
 dotenv.config()
 
 const client = new Discord.Client()
@@ -18,15 +20,29 @@ Object.keys(botCommands).map(key => {
 })
 
 
-function parseCommand(prefix, message) {
-  if(message.startsWith(prefix)) {
+const parseCommand = (prefix, message) => {
+  if (message.startsWith(prefix)) {
     const split = message.replace(prefix, '').split(/ /g)
     const command = split.shift().toLowerCase()
 
     return command
   } else {
-    msg.channel.send('Invalid command, please type `p:help` to see available commands!')
+    send(msg, 'Invalid command, please type `p:help` to see available commands!')
   }
+}
+
+const helperCommand = (msg) => {
+  let fields = []
+  client.commands.map((item) => {
+    fields.push({ name: "`" + item.label + "`", value: item.value })
+  })
+
+  const embed = new Discord.MessageEmbed()
+    .setColor('#2196F3')
+    .setTitle('Pandy Helper Command')
+    .addFields(fields)
+
+  send(msg, embed)
 }
 
 client.on('ready', () => {
@@ -42,24 +58,14 @@ client.on('message', msg => {
   const command = args.shift().toLowerCase()
 
   if (command === 'help') {
-    let fields = []
-    client.commands.map((item) => {
-      fields.push({ name: "`" + item.label + "`", value: item.value })
-    })
-
-    const embed = new Discord.MessageEmbed()
-      .setColor('#2196F3')
-      .setTitle('Pandy Helper Command')
-      .addFields(fields)
-
-    msg.channel.send(embed)
+    helperCommand(msg)
   }
 
-  
-  if(!msg.author.bot) {
+
+  if (!msg.author.bot) {
     try {
       const parse = parseCommand('p:', msg.content)
-      if (!client.commands.has(parse)) msg.channel.send('Invalid command, please type `p:help` to see available commands!')
+      if (!client.commands.has(parse)) send(msg, 'Invalid command, please type `p:help` to see available commands!')
 
       client.commands.get(parse).execute(msg, args);
     } catch (error) {
