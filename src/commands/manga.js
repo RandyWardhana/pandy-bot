@@ -11,9 +11,11 @@ const embedResult = (msg, params) => {
     .setAuthor(params.title, params.image_url, params.url)
     .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
     .setDescription(params.synopsis)
-    .addField('Chapter', formatNumber(params.chapters), false)
-    .addField('Volumes', formatNumber(params.volumes), false)
-    .addField('Score', params.score, false)
+    .setThumbnail(params.image_url)
+    .setTimestamp(new Date())
+    .addField('Chapter', formatNumber(params.chapters), true)
+    .addField('Volumes', formatNumber(params.volumes), true)
+    .addField('Score', params.score, true)
   
   send(msg, embed)
 }

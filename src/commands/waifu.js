@@ -10,6 +10,7 @@ const embedResult = (msg, params) => {
     .setAuthor(params.name, params.image_url, params.url)
     .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
     .setImage(params.image_url)
+    .setTimestamp(new Date())
 
   send(msg, embed)
 }

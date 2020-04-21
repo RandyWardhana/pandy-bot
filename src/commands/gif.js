@@ -14,6 +14,7 @@ const embedResult = (msg, params, args) => {
   .setAuthor(args, 'https://tenor.com/assets/img/tenor-app-icon.png', params.url)
   .setFooter('Copyright Tenor', 'https://tenor.com/assets/img/tenor-app-icon.png')
   .setImage(params.url)
+  .setTimestamp(new Date())
 
   send(msg, result)
 }

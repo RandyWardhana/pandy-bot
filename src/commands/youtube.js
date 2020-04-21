@@ -15,6 +15,8 @@ const embedResult = (msg, params, channelId) => {
     .addField('Subscribers', formatNumber(params.statistics.subscriberCount), true)
     .addField('Total Viewers', formatNumber(params.statistics.viewCount), true)
     .addField('Total Video', formatNumber(params.statistics.videoCount), true)
+    .setThumbnail(params.snippet.thumbnails.default.url)
+    .setTimestamp(new Date())
 
   send(msg, embed)
 }

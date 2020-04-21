@@ -10,6 +10,7 @@ const embedResult = (msg, params) => {
     .setColor('#15a97b')
     .setAuthor(`${params.Country}, ${params.CountryCode}`, '')
     .setFooter('Copyright covid19api.com', '')
+    .setTimestamp(new Date())
     .addField('Confirmed', params.Confirmed, false)
     .addField('Deaths', params.Deaths, false)
     .addField('Recovered', params.Recovered, false)
