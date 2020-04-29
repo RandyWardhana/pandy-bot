@@ -1,8 +1,10 @@
+import { reply } from '../response'
+
 export default {
   label: 'p:ping',
   name: 'ping',
-  value: 'Pong!',
+  value: '> Pong!',
   execute(msg, args) {
-    msg.reply('Pong!')
+    reply(msg, 'Pong!')
   }
 }

@@ -1,37 +1,44 @@
 import axios from 'axios'
 import { MessageEmbed } from 'discord.js'
 
+import { SeiyuuSearch } from '../util/endpoint'
+import { send, searching, errorResponse, successResponse, emptyArgument } from '../response'
+
+const embedResult = (msg, params) => {
+  const embed = new MessageEmbed()
+    .setColor('#2E52A2')
+    .setTitle(params.name)
+    .setURL(params.url)
+    .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
+    .setImage(params.image_url)
+    .setTimestamp(new Date())
+
+  send(msg, embed)
+}
+
 export default {
   label: 'p:seiyuu',
   name: 'seiyuu',
-  value: 'Find seiyuu by name',
+  value: '> Find seiyuu on MyAnimeList. Example of use:\n > `p:seiyuu Kana Hanazawa`',
   async execute(msg, args) {
     if (args.length < 1) {
-      msg.channel.send('Please insert Seiyuu name.\nFor Example: `-seiyuu {SEIYUU_NAME}`')
+      emptyArgument(msg)
     } else {
-      const URI = encodeURI(`${process.env.MYANIMELIST_URI}/search/people?q=${args.join(' ')}&limit=1`)
-
       try {
-        let result = await axios.get(URI)
-
-        if (result.data !== undefined) {
-          const {
-            url, image_url, name,
-          } = result.data.results[0]
-
-          const embed = new MessageEmbed()
-            .setColor('#2196f3')
-            .setAuthor(name, image_url, url)
-            .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
-            .setImage(image_url)
-
-          msg.channel.send(embed)
-        } else {
-          msg.channel.send(`Failed to get ${args} statistic`)
-        }
-
+        searching(msg, args, 'MyAnimeList').then(async (msg) => {
+          let result = await axios.get(SeiyuuSearch(args))
+  
+          if (result.data !== undefined) {
+            embedResult(msg, result.data.results[0])
+          } else {
+            errorResponse(msg, args, 'MyAnimeList')
+          }
+          successResponse(msg, 'MyAnimeList')
+        }, 0).catch((e) => {
+          errorResponse(msg, args, 'MyAnimeList')
+        })
       } catch (e) {
-        msg.channel.send(`Failed to get ${args} statistic`)
+        errorResponse(msg, args, 'MyAnimeList')
       }
     }
   }
