@@ -14,6 +14,7 @@ export default {
   label: 'p:ganbatte',
   name: 'ganbatte',
   value: 'Give encouragement to someone!',
+  value: '> Give encouragement to someone!. Example of use: \n > `p:ganbatte` or `p:ganbatte @Pandy`',
   execute(msg, args) {
     if (msg.mentions.users.size) {
       const taggedUser = msg.mentions.users.first()

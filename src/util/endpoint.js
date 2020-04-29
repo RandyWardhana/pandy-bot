@@ -7,7 +7,7 @@ const CovidSearch = (country, todayDate) => {
 }
 
 const GifSearch = (uri) => {
-  return encodeURI(`${process.env.TENOR_URI}/search?q=${uri.join(' ')}&limit=1&key=${process.env.TENOR_API_KEY}`)
+  return encodeURI(`${process.env.TENOR_URI}/search?q=${uri.join(' ')}&limit=1&random=1&key=${process.env.TENOR_API_KEY}`)
 }
 
 const MangaSearch = (uri) => {
@@ -16,6 +16,18 @@ const MangaSearch = (uri) => {
 
 const SeiyuuSearch = (uri) => {
   return encodeURI(`${process.env.MYANIMELIST_URI}/search/people?q=${uri.join(' ')}&limit=1`)
+}
+
+const VtuberSearch = (uri) => {
+  return encodeURI(`${process.env.VTUBER_URI}/Search/List?query=${uri.join(' ')}&limit=1`)
+}
+
+const VtuberAvatar = (id) => {
+  return encodeURI(`${process.env.VTUBER_URI}/Articles/Details?ids=${id}`)
+}
+
+const VtuberDetail = (id) => {
+  return encodeURI(`${process.env.VTUBER_URI}/Articles/AsSimpleJson?id=${id}`)
 }
 
 const WaifuSearch = (uri) => {
@@ -32,5 +44,6 @@ const YoutubeDetail = (channelId) => {
 
 export { 
   AnimeSearch, CovidSearch, GifSearch, MangaSearch, SeiyuuSearch,
-  WaifuSearch, YoutubeSearch, YoutubeDetail
+  VtuberSearch, VtuberAvatar, VtuberDetail, WaifuSearch, YoutubeSearch,
+  YoutubeDetail
  }

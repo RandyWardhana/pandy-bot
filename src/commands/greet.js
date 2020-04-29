@@ -16,7 +16,7 @@ const customGreetMessage = (msg, taggedUser) => {
 export default {
   label: 'p:greet',
   name: 'greet',
-  value: 'Greeting Someone!',
+  value: '> Greeting Someone!. Example of use: \n > `p:greet` or `p:greet @Pandy`',
   execute(msg, args) {
     if (msg.mentions.users.size) {
       const taggedUser = msg.mentions.users.first()

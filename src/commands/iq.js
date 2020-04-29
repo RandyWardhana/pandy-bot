@@ -24,7 +24,7 @@ const RandomMessage = (msg, taggedUser, randomIQ) => {
 export default {
   label: 'p:iq',
   name: 'iq',
-  value: 'Check your IQ',
+  value: '> Check your IQ!. Example of use: \n > `p:iq` or `p:iq @Pandy`',
   execute(msg, args) {
     const randomIQ = Math.floor(Math.random() * 200)
 

@@ -20,8 +20,9 @@ Object.keys(botCommands).map(key => {
 })
 
 const parseCommand = (prefix, message) => {
-  if (message.startsWith(prefix)) {
-    const split = message.replace(prefix, '').split(/ /g)
+  const checkParseCommand = message.toLowerCase().startsWith(prefix) || message.toLowerCase().startsWith('euy pandy, ') || message.toLowerCase().startsWith('assalamualaikum, ') || message.toLowerCase().startsWith('bismillah, ')
+  if (checkParseCommand) {
+    const split = message.toLowerCase().replace(prefix, '').replace('euy pandy, ', '').replace('assalamualaikum, ', '').replace('bismillah, ', '').split(/ /g)
     const command = split.shift().toLowerCase()
 
     return command
@@ -53,16 +54,15 @@ client.on('ready', () => {
 })
 
 client.on('message', msg => {
-  const args = msg.content.replace('p:', '').split(/ /g)
+  const args = msg.content.toLowerCase().replace('p:', '').replace('euy pandy, ', '').replace('assalamualaikum, ', '').replace('bismillah, ', '').split(/ /g)
   const command = args.shift().toLowerCase()
-
-  if (command === 'help') {
-    helperCommand(msg)
-  }
-
 
   if (!msg.author.bot) {
     try {
+      if (command === 'help') {
+        helperCommand(msg)
+      }
+
       const parse = parseCommand('p:', msg.content)
       if (!client.commands.has(parse)) send(msg, 'Invalid command, please type `p:help` to see available commands!')
 

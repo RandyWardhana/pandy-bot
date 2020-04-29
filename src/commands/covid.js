@@ -3,7 +3,7 @@ import axios from 'axios'
 import { MessageEmbed } from 'discord.js'
 
 import { CovidSearch } from '../util/endpoint'
-import { send, clear } from '../response'
+import { send, clear, errorResponse, successResponse, searching, emptyArgument } from '../response'
 
 const embedResult = (msg, params) => {
   const embed = new MessageEmbed()
@@ -26,26 +26,25 @@ export default {
   value: 'Tracking Covid-19 Case',
   async execute(msg, args) {
     if (args.length < 1) {
-      send(msg, 'Please insert country.\nFor example: `p:covid {COUNTRY_NAME}`')
+      emptyArgument(msg)
     } else {
       let country = args.shift().toLowerCase()
       let todayDate = `${moment().subtract(1, 'days').format('YYYY-MM-DD')}T00:00:00Z`
 
       try {
-        send(msg, '```Searching for covid information...```').then(async (msg) => {
+        searching(msg, country, 'Covid-19', 'covid').then(async (msg) => {
           let result = await axios.get(CovidSearch(country, todayDate))
           if (result.data !== undefined) {
             embedResult(msg, result.data[0])
           } else {
-            send(msg, `Failed to get Covid-19 information from ${country}`)
+            errorResponse(msg, country, 'Covid-19', 'covid')
           }
-          clear(msg)
-        }, 0).catch((e) => {
-          send(msg, `Failed to get Covid-19 information from ${country}`)
+          successResponse(msg, 'Covid-19')
+        }).catch((e) => {
+          errorResponse(msg, country, 'Covid-19', 'covid')
         })
-
       } catch (e) {
-        send(msg, `Failed to get Covid-19 information from ${country}`)
+        errorResponse(msg, country, 'Covid-19', 'covid')
       }
     }
   }

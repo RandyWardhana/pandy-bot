@@ -2,13 +2,14 @@ import axios from 'axios'
 import { MessageEmbed } from 'discord.js'
 
 import { AnimeSearch } from '../util/endpoint'
-import { send, clear } from '../response'
+import { send, errorResponse, successResponse, searching, emptyArgument } from '../response'
 
 const embedResult = (msg, params) => {
   let rated = params.rated == null ? 'No Reviews Yet' : params.rated
   const embed = new MessageEmbed()
-    .setColor('#2196f3')
-    .setAuthor(params.title, params.image_url, params.url)
+    .setColor('#2E52A2')
+    .setTitle(params.title)
+    .setURL(params.url)
     .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
     .setDescription(params.synopsis)
     .setThumbnail(params.image_url)
@@ -23,26 +24,26 @@ const embedResult = (msg, params) => {
 export default {
   label: 'p:anime',
   name: 'anime',
-  value: 'Find anime by title',
+  value: '> Find anime on MyAnimeList. Example of use:\n > `p:anime Yuru Camp`',
   async execute(msg, args) {
     if (args.length < 1) {
-      send(msg, 'Please insert Anime title.\nFor Example: `p:anime {ANIME_TITLE}`')
+      emptyArgument(msg)
     } else {
       try {
-        send(msg, '```Searching for Anime information....```').then(async (msg) => {
+        searching(msg, args, 'MyAnimeList').then(async (msg) => {
           let result = await axios.get(AnimeSearch(args))
 
           if (result.data !== undefined) {
             embedResult(msg, result.data.results[0])
           } else {
-            send(msg, `Failed to get ${args} statistic`)
+            errorResponse(msg, args, 'MyAnimeList')
           }
-          clear(msg)
-        }, 0).catch((e) => {
-          send(msg, `Failed to get ${args} statistic`)
+          successResponse(msg, 'MyAnimeList')
+        }).catch((e) => {
+          errorResponse(msg, args, 'MyAnimeList')
         })
       } catch (e) {
-        send(msg, `Failed to get ${args} statistic`)
+        errorResponse(msg, args, 'MyAnimeList')
       }
     }
   }

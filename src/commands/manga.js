@@ -3,12 +3,13 @@ import { MessageEmbed } from 'discord.js'
 
 import { MangaSearch } from '../util/endpoint'
 import { formatNumber } from '../util/formatNumber'
-import { send, clear } from '../response'
+import { send, errorResponse, successResponse, searching, emptyArgument } from '../response'
 
 const embedResult = (msg, params) => {
   const embed = new MessageEmbed()
-    .setColor('#2196f3')
-    .setAuthor(params.title, params.image_url, params.url)
+    .setColor('#2E52A2')
+    .setTitle(params.title)
+    .setURL(params.url)
     .setFooter('Copyright MyAnimeList', 'https://cdn.myanimelist.net/images/faviconv5.ico')
     .setDescription(params.synopsis)
     .setThumbnail(params.image_url)
@@ -16,35 +17,33 @@ const embedResult = (msg, params) => {
     .addField('Chapter', formatNumber(params.chapters), true)
     .addField('Volumes', formatNumber(params.volumes), true)
     .addField('Score', params.score, true)
-  
+
   send(msg, embed)
 }
 
 export default {
   label: 'p:manga',
   name: 'manga',
-  value: 'Find manga by title',
+  value: '> Find manga on MyAnimeList. Example of use:\n > `p:manga Komi San`',
   async execute(msg, args) {
     if (args.length < 1) {
-      send(msg, 'Please insert Manga title.\nFor Example: `p:manga {MANGA_TITLE}`')
+      emptyArgument(msg)
     } else {
       try {
-        send(msg, '```Searching for manga information....```').then(async (msg) => {
+        searching(msg, args, 'MyAnimeList').then(async (msg) => {
           let result = await axios.get(MangaSearch(args))
-          
+
           if (result.data !== undefined) {
             embedResult(msg, result.data.results[0])
           } else {
-            send(msg, `Failed to get ${args} statistic`)
+            errorResponse(msg, args, 'MyAnimeList')
           }
-          clear(msg)
+          successResponse(msg, 'MyAnimeList')
         }, 0).catch((e) => {
-          clear(msg)
-          send(msg, `Failed to get ${args} statistic`)
+          errorResponse(msg, args, 'MyAnimeList')
         })
-
       } catch (e) {
-        send(msg, `Failed to get ${args} statistic`)
+        errorResponse(msg, args, 'MyAnimeList')
       }
     }
   }
