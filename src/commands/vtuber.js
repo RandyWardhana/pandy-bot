@@ -2,16 +2,74 @@ import axios from 'axios'
 import { MessageEmbed } from 'discord.js'
 
 import { VtuberSearch, VtuberDetail, VtuberAvatar } from '../util/endpoint'
-import { send, clear, searching, errorResponse, successResponse, emptyArgument } from '../response'
+import { send, searching, errorResponse, successResponse, emptyArgument } from '../response'
 
-const embedResult = (msg, params, title, avatar, url) => {
-  // let description = 
+const renderPersonality = (params) => {
+  let content = ''
+
+  params.map((res) => {
+    if (res.title.includes('Personality')) {
+      if (res.content.length > 0) {
+        res.content.map((item, index) => {
+          if (index < 1) content += `${item.text}\n\n`
+        })
+      } else {
+        content = "Personality hasn't added yet."
+      }
+    } else {
+      content = "Personality hasn't added yet."
+    }
+  })
+  return content
+}
+
+const renderBackground = (params) => {
+  let content = ''
+
+  params.map((res) => {
+    if (res.title.includes('Background')) {
+      if (res.content.length > 0) {
+        res.content.map((item, index) => {
+          if (index < 1) content += `${item.text}\n\n`
+        })
+      } else {
+        content = "Background hasn't added yet."
+      }
+    }
+  })
+  return content
+}
+
+const renderFans = (params) => {
+  let content = ''
+
+  params.map((res) => {
+    if (res.title.includes('Fans')) {
+      if (res.content.length > 0) {
+        res.content.map((item) => {
+          item.elements.map((data, index) => {
+            if (index < 1) content += `${data.text}\n\n`
+          })
+        })
+      } else {
+        content = "Fans hasn't added yet."
+      }
+    }
+  })
+  return content
+}
+
+const embedResult = (msg, params, avatar, url) => {
   const embed = new MessageEmbed()
     .setColor('#08D6D6')
-    .setTitle(title)
+    .setTitle(params[0].title)
+    .setDescription(params[0].content[0].text)
     .setURL(url)
+    .setTimestamp(new Date())
     .setThumbnail(avatar)
-    .addField('Background', )
+    // .addField('Personality', renderPersonality(params))
+    // .addField('Background', renderBackground(params))
+    .addField('Fans', renderFans(params))
     .setFooter('Powered by Fandom', 'https://i.dlpng.com/static/png/6965866_preview.png')
 
   send(msg, embed)
@@ -33,21 +91,20 @@ export default {
             errorResponse(msg, args, 'Fandom')
           } else {
             const { id, url } = result.data.items[0]
-            
+
             try {
               let resultDetail = await axios.get(VtuberDetail(id))
               let resultAvatar = await axios.get(VtuberAvatar(id))
-              
+
               if (resultDetail.data == undefined) {
                 errorResponse(msg, args, 'Fandom')
               } else {
                 let dataDetail = resultDetail.data.sections
-                let title = dataDetail[0].title
                 let dataAvatar = resultAvatar.data.items[id].thumbnail
-                
+
                 const avatar = dataAvatar.replace(/(\s)/g, '')
-                
-                embedResult(msg, dataDetail, title, avatar, url)
+
+                embedResult(msg, dataDetail, avatar, url)
               }
             } catch (e) {
               errorResponse(msg, args, 'Fandom')

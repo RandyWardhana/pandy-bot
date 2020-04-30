@@ -23,7 +23,7 @@ const embedResult = (msg, params) => {
 export default {
   label: 'p:covid',
   name: 'covid',
-  value: 'Tracking Covid-19 Case',
+  value: '> Tracking Covid-19 Case. Example of use: \n> p:covid Indonesia',
   async execute(msg, args) {
     if (args.length < 1) {
       emptyArgument(msg)

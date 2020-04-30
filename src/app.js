@@ -38,7 +38,7 @@ const helperCommand = (msg) => {
   })
 
   const embed = new Discord.MessageEmbed()
-    .setColor('#2196F3')
+    .setColor('#FAA61A')
     .setTitle('Pandy Helper Command')
     .addFields(fields)
 
