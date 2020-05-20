@@ -25,6 +25,15 @@ const renderEngas = (msg, args) => {
 
   send(msg, template.toUpperCase())
 }
+const renderIndihomo = (msg, args) => {
+  const [first, ...remaining] = args
+
+  let template = `
+  Halo Kak ${remaining.join(' ')},  kendala yang dialami Kami sarankan silakan restart modemnya selama 10 menit, jika masih berkendala silakan lakukan unplug/lepas-pasang kabel patch cord (kabel berwarna hitam/kuning dengan ujung biru) ke ONT (modem). Jika masih berkendala silakan informasikan nomor IndiHome nya, atas nama pemilik dan nomor HP yang aktif via Inbox ya Kakak. Terima kasih
+  `
+
+  send(msg, template)
+}
 
 const renderTemplate = (msg, args) => {
   switch (args[0]) {
@@ -32,6 +41,8 @@ const renderTemplate = (msg, args) => {
       return renderFanBase(msg, args)
     case 'engas':
       return renderEngas(msg, args)
+    case 'indihomo':
+      return renderIndihomo(msg, args)
   }
 }
 
