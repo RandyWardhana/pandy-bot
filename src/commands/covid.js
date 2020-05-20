@@ -1,21 +1,26 @@
 import moment from 'moment'
 import axios from 'axios'
+import _ from 'lodash'
 import { MessageEmbed } from 'discord.js'
 
+import { send, errorResponse, successResponse, searching, emptyArgument, failedResponse } from '../response'
 import { CovidSearch } from '../util/endpoint'
-import { send, clear, errorResponse, successResponse, searching, emptyArgument } from '../response'
+import { formatNumber } from '../util/formatNumber'
 
 const embedResult = (msg, params) => {
   const embed = new MessageEmbed()
     .setColor('#15a97b')
-    .setAuthor(`${params.Country}, ${params.CountryCode}`, '')
-    .setFooter('Copyright covid19api.com', '')
+    .setAuthor(`${params.country}`, '')
+    .setFooter('Copyright coronavirus-19-api.herokuapp.com', '')
     .setTimestamp(new Date())
-    .addField('Confirmed', params.Confirmed, false)
-    .addField('Deaths', params.Deaths, false)
-    .addField('Recovered', params.Recovered, false)
-    .addField('Active', params.Active, false)
-    .addField('Last Updated', moment(params.Date).locale('id').format('DD MMM YYYY, HH:mm'), false)
+    .addField('Today Cases', formatNumber(params.todayCases), true)
+    .addField('Today Deaths', formatNumber(params.todayDeaths), false)
+    .addField('Cases', formatNumber(params.cases), true)
+    .addField('Deaths', formatNumber(params.deaths), true)
+    .addField('Recovered', formatNumber(params.recovered), true)
+    .addField('Active', formatNumber(params.active), true)
+    .addField('Critical Condition', formatNumber(params.critical), true)
+    .addField('Last Updated', moment(params.Date).locale('id').format('DD MMM YYYY, HH:mm'), true)
 
   send(msg, embed)
 }
@@ -33,15 +38,16 @@ export default {
 
       try {
         searching(msg, country, 'Covid-19', 'covid').then(async (msg) => {
-          let result = await axios.get(CovidSearch(country, todayDate))
-          if (result.data !== undefined) {
-            embedResult(msg, result.data[0])
+          let result = await axios.get(CovidSearch(country))
+          
+          if (_.isEmpty(result.data)) {
+            failedResponse(msg, country, 'Covid-19', 'covid')
           } else {
-            errorResponse(msg, country, 'Covid-19', 'covid')
+            embedResult(msg, result.data)
+            successResponse(msg, 'Covid-19')
           }
-          successResponse(msg, 'Covid-19')
         }).catch((e) => {
-          errorResponse(msg, country, 'Covid-19', 'covid')
+          failedResponse(msg, country, 'Covid-19', 'covid')
         })
       } catch (e) {
         errorResponse(msg, country, 'Covid-19', 'covid')

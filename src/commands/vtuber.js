@@ -1,8 +1,9 @@
 import axios from 'axios'
+import _ from 'lodash'
 import { MessageEmbed } from 'discord.js'
 
 import { VtuberSearch, VtuberDetail, VtuberAvatar } from '../util/endpoint'
-import { send, searching, errorResponse, successResponse, emptyArgument } from '../response'
+import { send, searching, errorResponse, successResponse, emptyArgument, failedResponse } from '../response'
 
 const renderPersonality = (params) => {
   let content = ''
@@ -87,30 +88,30 @@ export default {
         searching(msg, args, 'Fandom').then(async (msg) => {
           let result = await axios.get(VtuberSearch(args))
 
-          if (result.data == undefined) {
-            errorResponse(msg, args, 'Fandom')
+          if (_.isEmpty(result.data.items)) {
+            failedResponse(msg, args, 'Fandom')
           } else {
             const { id, url } = result.data.items[0]
-
+            
             try {
               let resultDetail = await axios.get(VtuberDetail(id))
               let resultAvatar = await axios.get(VtuberAvatar(id))
-
-              if (resultDetail.data == undefined) {
-                errorResponse(msg, args, 'Fandom')
+              
+              if (_.isEmpty(resultDetail.data) && _.isEmpty(resultAvatar.data)) {
+                failedResponse(msg, args, 'Fandom')
               } else {
                 let dataDetail = resultDetail.data.sections
                 let dataAvatar = resultAvatar.data.items[id].thumbnail
-
+                
                 const avatar = dataAvatar.replace(/(\s)/g, '')
-
+                
                 embedResult(msg, dataDetail, avatar, url)
+                successResponse(msg, 'Fandom')
               }
             } catch (e) {
-              errorResponse(msg, args, 'Fandom')
+              failedResponse(msg, args, 'Fandom')
             }
           }
-          successResponse(msg, 'Fandom')
         }, 0)
       } catch (e) {
         errorResponse(msg, args, 'Fandom')

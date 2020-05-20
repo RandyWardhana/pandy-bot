@@ -19,13 +19,18 @@ const successResponse = (msg, platform) => {
 }
 
 const errorResponse = (msg, params, platform, type) => {
-  let passedParams = type == 'covid' ? params : params.join(' ')
-  return send(msg, `Can not found ${passedParams} on ${platform}.`)
+  let passedParams = (type == 'covid' || type == 'sauce') ? params : params.join(' ')
+  return send(msg, `Can't found ${passedParams} on ${platform}.`)
+}
+
+const failedResponse = (msg, params, platform, type) => {
+  let passedParams = (type == 'covid' || type == 'sauce') ? params : params.join(' ')
+  return update(msg, `Can't found ${passedParams} on ${platform}.`)
 }
 
 const searching = (msg, params, platform, type) => {
-  let passedParams = type == 'covid' ? params : params.join(' ')
-  return send(msg, `> Searching ${passedParams} on ${platform}...`)
+  let passedParams = (type == 'covid' || type == 'sauce') ? params : params.join(' ')
+  return send(msg, `Searching ${passedParams} on ${platform}...`)
 }
 
 const emptyArgument = (msg) => {
@@ -36,4 +41,4 @@ const nsfwCheck = (msg) => {
   return send(msg, '> This command is only available in NSFW Channel!')
 }
 
-export { clear, update, reply, send, successResponse, errorResponse, searching, emptyArgument, nsfwCheck }
+export { clear, update, reply, send, successResponse, errorResponse, failedResponse, searching, emptyArgument, nsfwCheck }
