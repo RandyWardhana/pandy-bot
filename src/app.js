@@ -15,12 +15,23 @@ const activities_list = [
   "p:help for help"
 ]
 
+const availableCommand = [
+  'p:',
+  'euy pandy, ',
+  'assalamualaikum, ',
+  'bismillah, ',
+]
+
 Object.keys(botCommands).map(key => {
   client.commands.set(botCommands[key].name, botCommands[key]);
 })
 
+const startCommand = (prefix, message) => {
+  return message.toLowerCase().startsWith(prefix)
+}
+
 const parseCommand = (prefix, message) => {
-  const checkParseCommand = message.toLowerCase().startsWith(prefix) || message.toLowerCase().startsWith('euy pandy, ') || message.toLowerCase().startsWith('assalamualaikum, ') || message.toLowerCase().startsWith('bismillah, ')
+  const checkParseCommand = startCommand(prefix, message) || startCommand('euy pandy, ', message) || startCommand('assalamualaikum, ', message) || startCommand('bismillah, ', message)
   if (checkParseCommand) {
     const split = message.toLowerCase().replace(prefix, '').replace('euy pandy, ', '').replace('assalamualaikum, ', '').replace('bismillah, ', '').split(/ /g)
     const command = split.shift().toLowerCase()
@@ -33,12 +44,13 @@ const parseCommand = (prefix, message) => {
 
 const helperCommand = (msg) => {
   let fields = []
+  
   client.commands.map((item) => {
-    fields.push({ name: "`" + item.label + "`", value: item.value })
+    if (item.label !== 'p:help') fields.push({ name: "`" + item.label + "`", value: item.value })
   })
 
   const embed = new Discord.MessageEmbed()
-    .setColor('#2196F3')
+    .setColor('#FAA61A')
     .setTitle('Pandy Helper Command')
     .addFields(fields)
 
@@ -55,12 +67,15 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   const args = msg.content.toLowerCase().replace('p:', '').replace('euy pandy, ', '').replace('assalamualaikum, ', '').replace('bismillah, ', '').split(/ /g)
+  const checkParseCommand = startCommand('p:', msg.content) || startCommand('euy pandy, ', msg.content) || startCommand('assalamualaikum, ', msg.content) || startCommand('bismillah, ', msg.content)
   const command = args.shift().toLowerCase()
 
   if (!msg.author.bot) {
     try {
-      if (command === 'help') {
-        helperCommand(msg)
+      if (checkParseCommand) {
+        if (command === 'help') {
+          helperCommand(msg)
+        }
       }
 
       const parse = parseCommand('p:', msg.content)

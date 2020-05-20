@@ -1,8 +1,9 @@
 import axios from 'axios'
+import _ from 'lodash'
 import { MessageEmbed } from 'discord.js'
 
 import { AnimeSearch } from '../util/endpoint'
-import { send, errorResponse, successResponse, searching, emptyArgument } from '../response'
+import { send, errorResponse, successResponse, searching, emptyArgument, failedResponse } from '../response'
 
 const embedResult = (msg, params) => {
   let rated = params.rated == null ? 'No Reviews Yet' : params.rated
@@ -33,14 +34,14 @@ export default {
         searching(msg, args, 'MyAnimeList').then(async (msg) => {
           let result = await axios.get(AnimeSearch(args))
 
-          if (result.data !== undefined) {
-            embedResult(msg, result.data.results[0])
+          if (_.isEmpty(result.data)) {
+            failedResponse(msg, args, 'MyAnimeList')
           } else {
-            errorResponse(msg, args, 'MyAnimeList')
+            embedResult(msg, result.data.results[0])
+            successResponse(msg, 'MyAnimeList')
           }
-          successResponse(msg, 'MyAnimeList')
         }).catch((e) => {
-          errorResponse(msg, args, 'MyAnimeList')
+          failedResponse(msg, args, 'MyAnimeList')
         })
       } catch (e) {
         errorResponse(msg, args, 'MyAnimeList')
