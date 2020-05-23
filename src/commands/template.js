@@ -37,9 +37,55 @@ const renderIndihomo = (msg, args) => {
 }
 
 const renderLebaran = (msg, args) => {
-  let template = 'Mohon dimaafkan kesalahan2 yang pernah ku lakukan baik yang disengaja dan tidak, minal aidin wal faidzin mohon maaf lahir dan batin🙏 @everyone'
+  let idulFitri = 1441
+  let lebaran = [
+    'Mohon dimaafkan kesalahan2 yang pernah ku lakukan baik yang disengaja dan tidak, minal aidin wal faidzin mohon maaf lahir dan batin🙏 @everyone',
+    `
+  بِسْــــــــــــــمِ اللهِ الرَّحْمَنِ   الرَّحِيْـــــم  
 
-  send(msg, template)
+السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ 
+
+تَقَبَّلَ اللّهُ مِنَّا وَمنِْكُمْ صِيَامَنَا وَصِيَامَكُمْ,
+ كُلُّ عَامٍ وَأَنْتُمْ بِخَيْرٍ. اَللّهُمَّ اجْعَلْنَا وَإِيَّاكُمْ مِنَ العَاءِدِيْنَ وَالفَاءِزِيْنَ  وَالمَقْبُوْلِيْنَ.
+
+Minal'aidzin wal faidzin
+Mohon maaf lahir batin
+
+Semoga Allah SWT senantiasa memberikan kesehatan, rejeki serta umur yang barakah pada kita semua serta dapat bertemu lagi di bulan Ramadhan yang akan datang . Insya Allah, Amiinn99x ya rabbal'alamin :palms_up_together::palms_up_together:
+
+Pandy Bot dan sahabat
+
+وَ السَّلاَمُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ
+
+@everyone`, 
+`Selamat hari Raya Idul Fitri untuk siapa pun yang membaca pesan ini. Buat kamu yang masih di rumah, terima kasih untuk tetap bertahan walau terus dilanda bosan.
+
+Untuk kamu yang mengharuskan kerja diluar, semoga rezeki berlimpah dan tetap menjaga kesehatan.
+
+Buat kamu pejuang garda terdepan, terima kasih untuk segala pengorbanan yang diberikan. Semoga lelahmu menjadi pahala.
+
+Semoga kita semua diberikan keikhlasan dan kesabaran dalam menghadapi ujian ini.
+
+Lebaran kali ini nuansanya berbeda, namun bukanlah penghalang kita untuk saling bermaaf-maafan.
+
+Minal aidzin wal faidzin, mohon maaf lahir dan batin.
+
+@everyone`,
+
+`Happy Eid Mubarak,
+
+Mohon dimaafkan atas segala khilaf perkataan atau perbuatan yg disengaja dan tidak disengaja🙏🏻
+
+Semoga amal ibadah kita diterima Allah dan diampunkan segala dosa, Aamiin Ya Rabbal Alamin🙏🏻🤲🏻 @everyone`,
+
+`Taqabbalallahu minna wa minkum, Shiyamana wa Shiyamakum.
+Ja’alanallaahu Minal ‘Aidin wal Faizin
+
+Selamat Hari Raya Idul Fitri ${idulFitri} Hijriah 🙏🏻😇 @everyone`]
+
+  const randomLebaran = Math.floor(Math.random() * lebaran.length)
+
+  send(msg, lebaran[randomLebaran])
 }
 
 const renderTemplate = (msg, args) => {
