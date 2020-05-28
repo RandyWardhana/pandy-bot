@@ -74,5 +74,12 @@ Mocking someone. Example of use:
 Gacha something, please mention 2 or more people to use this command!. Example of use:
 `p:gacha @Pandy @Myself`
 
+###### `p:sauce`
+Find sauce on TraceMoe. Example of use:
+`p:sauce <insert anime image>`
+
+###### `p:steal`
+Use this command to show your friend personal information!
+
 ###### `p:help`
 Pandy Helper Command!
