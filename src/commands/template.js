@@ -1,4 +1,5 @@
 import { send, emptyArgument } from '../response'
+import _ from 'lodash'
 
 const renderFanBase = (msg, args) => {
   // args[1] = User Tagged
@@ -19,18 +20,26 @@ const renderFanBase = (msg, args) => {
 const renderEngas = (msg, args) => {
   const [first, ...remaining] = args
 
+  let taggedUser = []
+  let fixArgs = []
+  
+  remaining.map((detail) => {
+    if (detail.includes('@')) taggedUser.push(detail)
+    else fixArgs.push(detail)
+  })
+
   let template = `
-    ANJING ${remaining.join(' ')} GA LU, ${remaining.join(' ')} SEKARANG!!! GUA DAH GAK TAHAN, LO POKOKNYA HARUS ${remaining.join(' ')} ANJING PLEASE LO GATAU APA SETIAP HARINYA LIAT LU SLIWAR SLIWER, GUA NGACENG BANGSATTTT LU PAHAM GA SIH SELAMA INI GUA PENGEN LIAT ELU ${remaining.join(' ')}, TAU GAK GUA SELALU NAHAN HORNY, DI KANTOR , DI WARUNG, DI RUMAH CUMA PENGEN PUAS PUASIN HASRAT GUA BUAT LIAT ELU ${remaining.join(' ')} PLIS SEKALI AJA PLIS, GAPEDULI DILUAR SANA APA YANG TERJADI, ELO ${remaining.join(' ')} GUA UDAH SENENG BANGSAT ANJING LU KUDU PAHAM GUA GA SUDI KEHILANGAN ELU, LU HARUS SETIDAKNYA ${remaining.join(' ')} DAN MEMBEKAS DI MEMORI INDAH GUA PLIS DEH GW MINTA SEGENAP HATI GW AGAR LU ${remaining.join(' ')}
+    ANJING ${fixArgs.join(' ').toUpperCase()} GA LU, ${fixArgs.join(' ').toUpperCase()} SEKARANG!!! GUA DAH GAK TAHAN, LO POKOKNYA HARUS ${fixArgs.join(' ').toUpperCase()} ANJING PLEASE LO GATAU APA SETIAP HARINYA LIAT LU SLIWAR SLIWER, GUA NGACENG BANGSATTTT LU PAHAM GA SIH SELAMA INI GUA PENGEN LIAT ELU ${fixArgs.join(' ').toUpperCase()}, TAU GAK GUA SELALU NAHAN HORNY, DI KANTOR , DI WARUNG, DI RUMAH CUMA PENGEN PUAS PUASIN HASRAT GUA BUAT LIAT ELU ${fixArgs.join(' ').toUpperCase()} PLIS SEKALI AJA PLIS, GAPEDULI DILUAR SANA APA YANG TERJADI, ELO ${fixArgs.join(' ').toUpperCase()} GUA UDAH SENENG BANGSAT ANJING LU KUDU PAHAM GUA GA SUDI KEHILANGAN ELU, LU HARUS SETIDAKNYA ${fixArgs.join(' ').toUpperCase()} DAN MEMBEKAS DI MEMORI INDAH GUA PLIS DEH GW MINTA SEGENAP HATI GW AGAR LU ${fixArgs.join(' ').toUpperCase()} ${taggedUser.join(' ')}
   `
 
-  send(msg, template.toUpperCase())
+  send(msg, template)
 }
 
 const renderIndihomo = (msg, args) => {
   const [first, ...remaining] = args
 
   let template = `
-  Halo Kak ${remaining.join(' ')},  kendala yang dialami Kami sarankan silakan restart modemnya selama 10 menit, jika masih berkendala silakan lakukan unplug/lepas-pasang kabel patch cord (kabel berwarna hitam/kuning dengan ujung biru) ke ONT (modem). Jika masih berkendala silakan informasikan nomor IndiHome nya, atas nama pemilik dan nomor HP yang aktif via Inbox ya Kakak. Terima kasih
+  Halo Kak ${remaining.join(' ')}, kendala yang dialami Kami sarankan silakan restart modemnya selama 10 menit, jika masih berkendala silakan lakukan unplug/lepas-pasang kabel patch cord (kabel berwarna hitam/kuning dengan ujung biru) ke ONT (modem). Jika masih berkendala silakan informasikan nomor IndiHome nya, atas nama pemilik dan nomor HP yang aktif via Inbox ya Kakak. Terima kasih
   `
 
   send(msg, template)
@@ -88,6 +97,15 @@ Selamat Hari Raya Idul Fitri ${idulFitri} Hijriah 🙏🏻😇 @everyone`]
   send(msg, lebaran[randomLebaran])
 }
 
+const renderArgumen = (msg, args) => {
+  const [first, tagged, ...remaining ] = args
+
+  let taggedUser = tagged.includes('@') ? tagged : tagged.toUpperCase()
+
+  let template = `ARGUMEN YANG BAGUS ${taggedUser}, SEKARANG KEMBALI ${remaining.join(' ').toUpperCase()}!`
+  send(msg, template)
+}
+
 const renderTemplate = (msg, args) => {
   switch (args[0]) {
     case 'fanbase':
@@ -98,6 +116,8 @@ const renderTemplate = (msg, args) => {
       return renderIndihomo(msg, args)
     case 'lebaran':
       return renderLebaran(msg, args)
+    case 'args':
+      return renderArgumen(msg, args)
   }
 }
 
