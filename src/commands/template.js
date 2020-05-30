@@ -102,7 +102,7 @@ const renderArgumen = (msg, args) => {
 
   let taggedUser = tagged.includes('@') ? tagged : tagged.toUpperCase()
 
-  let template = `ARGUMEN YANG BAGUS ${taggedUser}, SEKARANG KEMBALI ${remaining.join(' ').toUpperCase()}!`
+  let template = `ARGUMEN YANG BAGUS ${taggedUser}, SEKARANG ${remaining.join(' ').toUpperCase()}!`
   send(msg, template)
 }
 

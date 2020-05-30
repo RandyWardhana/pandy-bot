@@ -6,12 +6,14 @@ const update = (msg, description) => {
   return msg.edit(description)
 }
 
-const reply = (msg, description) => {
-  return msg.reply(description)
+const reply = (msg, description, files) => {
+  if (files) return msg.reply(description, { files: [files] })
+  else return msg.reply(description)
 }
 
-const send = (msg, description) => {
-  return msg.channel.send(description)
+const send = (msg, description, files) => {
+  if (files) return msg.channel.send(description, { files: [files] })
+  else return msg.channel.send(description)
 }
 
 const successResponse = (msg, platform) => {
