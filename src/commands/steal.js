@@ -18,7 +18,7 @@ export default {
   name: 'steal',
   value: 'Use this command to show your friend personal information!',
   execute(msg, args) {
-    if(args.length < 1) {
+    if (args.length < 1) {
       emptyArgument(msg)
     } else {
       let user = msg.mentions.users.first()      

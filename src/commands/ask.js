@@ -1,5 +1,3 @@
-import { reply } from '../response'
-
 export default {
   label: 'p:yoi',
   name: 'yoi',

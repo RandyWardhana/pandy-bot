@@ -18,6 +18,7 @@ import Mocking from './mocking'
 import Gacha from './gacha'
 import Sauce from './sauce'
 import Steal from './steal'
+import Meme from './meme'
 import Help from './help'
 
 export {
@@ -25,5 +26,5 @@ export {
   Seiyuu, Waifu, Iq, Youtube, Ganbatte,
   Ask, Gif, Vtuber, Spoiler, Template,
   Mabar, Mocking, Gacha, Sauce, Steal,
-  Help
+  Meme, Help
 }
